@@ -1,8 +1,8 @@
 /** @type { import("drizzle-kit").Config } */
 export default {
-    schema: "./schema.ts",
+    schema: "./utils/schema.js",
     dialect: 'postgresql',
     dbCredentials: {
-      url: process.env.DB_URL,
+      url: "postgresql://preptrackaidb_owner:OkQ6Lswn4BYD@ep-long-moon-a11i2mpf.ap-southeast-1.aws.neon.tech/preptrackaidb?sslmode=require",
     }
   };
