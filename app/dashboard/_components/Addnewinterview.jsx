@@ -18,7 +18,8 @@ import { mockinterview } from '@/utils/schema'
 import { v4 as uuiidv4 } from 'uuid'
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
+
 
 function Addnewinterview() {
     const [openDailog, setOpenDailog] = useState(false);
@@ -28,7 +29,7 @@ function Addnewinterview() {
     const [loading,setloading]=useState(false);
     const [jsonresponse,setjsonresponse]=useState([]);
     const {user} = useUser();
-    const router=useRouter();
+    const router= useRouter();
     
     const onSubmit= async (e)=>{
         setloading(true)
@@ -60,7 +61,7 @@ function Addnewinterview() {
     
         if(resp){
             setOpenDailog(false);
-            router.push('/dashboard/interview/'+resp[0]?.mockid)
+            router.push('/dashboard/interview/'+resp[0].mockid)
         }
     
     
