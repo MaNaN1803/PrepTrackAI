@@ -10,15 +10,65 @@ import {
   } from "@/components/ui/dialog"
   import { Input } from "@/components/ui/input"
 import { Textarea } from '@/components/ui/textarea'
+import { chatSession } from '@/utils/GeminiAIModal'
+import { Button } from '@/components/ui/button'
+import { LoaderCircle } from 'lucide-react'
+import { db } from '@/utils/db'
+import { mockinterview } from '@/utils/schema'
+import { v4 as uuiidv4 } from 'uuid'
+import { useUser } from '@clerk/nextjs';
+import moment from 'moment'
+import { useRouter } from 'next/navigation'
 
 function Addnewinterview() {
     const [openDailog, setOpenDailog] = useState(false);
     const [jobPosition, setJobPosition]=useState();
     const [jobDesc, setJobDesc]=useState();
     const [jobExperience, setJobExperience]=useState();
-    const onSubmit=(e)=>{
+    const [loading,setloading]=useState(false);
+    const [jsonresponse,setjsonresponse]=useState([]);
+    const {user} = useUser();
+    const router=useRouter();
+    
+    const onSubmit= async (e)=>{
+        setloading(true)
+
         e.preventDefault();
         console.log(jobPosition, jobDesc, jobExperience);
+
+        const InputPrompt="Job Position: "+jobPosition+", Job Description:"+jobDesc+", Years of Experience: "+jobExperience+", Depends on this information please give me "+process.env.NEXT_PUBLIC_NUMBER_OF_QUESTION+" Interview question with Answered in Json Format, Give Question and Answered as field in JSON";
+
+        const result = await chatSession.sendMessage(InputPrompt);
+        const MockJsonResp=(result.response.text()).replace('```json','').replace('```','')
+        console.log(JSON.parse(MockJsonResp));
+
+        setjsonresponse(MockJsonResp);
+        if(MockJsonResp){
+        const resp=await db.insert(mockinterview).values({
+            mockid:uuiidv4(),
+            jsonMockresp:MockJsonResp,
+            jobPosition:jobPosition,
+            jobDesc:jobDesc,
+            jobExperience:jobExperience,
+            createdby:user?.primaryEmailAddress?.emailAddress,
+            createdat:moment().format('DD-MM-yyyy')
+        }).returning({
+            mockid:mockinterview.mockid
+        })
+
+        console.log("Inserted ID: ",resp)
+    
+        if(resp){
+            setOpenDailog(false);
+            router.push('/dashboard/interview/'+resp[0]?.mockid)
+        }
+    
+    
+    }
+    else{
+        console.log("Error");
+    }
+        setloading(false)
     }
 
   return (
@@ -58,8 +108,14 @@ function Addnewinterview() {
                 
                 </div>
                 <div className='flex gap-5 justify-end '>
-                    <button type='button' variant="ghost" onClick={()=>setOpenDailog(false)}>Cancel</button>
-                    <button type='submit' >Start Interview !!</button>
+                    <Button type='button' variant="ghost" onClick={()=>setOpenDailog(false)}>Cancel</Button>
+                    <Button type='submit' disabled={loading}>
+                    {loading?
+                        <>
+                        <LoaderCircle/>'Generating YOUR AI Powered Interview'
+                        </>:'Start Interview !!'
+                    }
+                    </Button>
                 </div>
                 </form>
             </DialogDescription>
