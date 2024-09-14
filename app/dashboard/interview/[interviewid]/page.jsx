@@ -3,6 +3,8 @@ import { db } from '@/utils/db'
 import React, { useEffect, useState } from 'react'
 import { mockinterview } from '@/utils/schema'
 import { eq } from 'drizzle-orm'
+import Webcam from 'react-webcam'
+import { WebcamIcon } from 'lucide-react'
 
 
 function Interview(params) {
@@ -30,6 +32,10 @@ function Interview(params) {
                     – Manan Telrandhe
                 </span>
             </blockquote>
+            <div>
+                <Webcam/>
+                <WebcamIcon className='h-72 w-full my-7 bg-secondary p-20 rounded-lg border'/>
+            </div>
     </div>
   )
 }
