@@ -48,32 +48,28 @@ function Header() {
         <ul className="hidden md:flex gap-8 items-center">
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
           >
             Dashboard
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard/questions" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard/questions" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
           >
             Questions
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard/upgrade" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard/upgrade" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
           >
             Upgrade
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard/howitworks" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard/howitworks" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
           >
             How it Works?
@@ -102,8 +98,7 @@ function Header() {
         <ul className="flex flex-col gap-4 p-4 bg-gray-800">
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
             onClick={() => setIsMenuOpen(false)}
           >
@@ -111,8 +106,7 @@ function Header() {
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard/questions" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard/questions" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
             onClick={() => setIsMenuOpen(false)}
           >
@@ -120,8 +114,7 @@ function Header() {
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard/upgrade" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard/upgrade" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
             onClick={() => setIsMenuOpen(false)}
           >
@@ -129,8 +122,7 @@ function Header() {
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path == "/dashboard/howitworks" &&
-              "text-[#FFD700] font-bold border-b-2 border-[#FFD700]"
+              path === "/dashboard/howitworks" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
             onClick={() => setIsMenuOpen(false)}
           >
