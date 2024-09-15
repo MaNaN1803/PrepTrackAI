@@ -1,50 +1,126 @@
-"use client";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
-import useSpeechToText from "react-hook-speech-to-text";
 import { Mic, MicOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { chatSession } from "@/utils/GeminiAIModal";
+import { UserAnswer } from "@/utils/schema";
+import { useUser } from "@clerk/nextjs";
+import moment from "moment";
+import { db } from "@/utils/db";
 
-function RecordanswerSec({mockinterviewquestion,activequestionindex}) {
+function RecordanswerSec({ mockinterviewquestion, activequestionindex, interviewdata }) {
   const [useranswer, setuseranswer] = useState("");
-  const {
-    error,
-    interimResult,
-    isRecording,
-    results,
-    startSpeechToText,
-    stopSpeechToText,
-  } = useSpeechToText({
-    continuous: true,
-    useLegacyResults: false,
-  });
+  const { user } = useUser();
+  const [loading, setloading] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [recognition, setRecognition] = useState(null);
 
   useEffect(() => {
-    results.map((result) => {
-      setuseranswer((prevans) => prevans + result?.transcript);
-    });
-  }, [results]);
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        const recognitionInstance = new SpeechRecognition();
+        recognitionInstance.continuous = true;
+        recognitionInstance.interimResults = true;
 
-   const saveuseranswer= async()=>{
-    if(isRecording){
-      stopSpeechToText();
-      if(useranswer?.length<10){
-        toast('Error saving your answer,Please record again Try to Speak a bit more')
-        return;
+        recognitionInstance.onresult = (event) => {
+          const transcript = Array.from(event.results)
+            .map(result => result[0].transcript)
+            .join('');
+          setuseranswer(transcript);
+        };
+
+        recognitionInstance.onend = () => {
+          setIsRecording(false);
+        };
+
+        setRecognition(recognitionInstance);
+      } else {
+        console.error("SpeechRecognition is not supported in this browser.");
       }
-      const feedbackprompt = "Question: "+mockinterviewquestion[activequestionindex]?.Question+", User Answer: "+useranswer+", Depends on question and user answer for give interview question"+"please give us performance rating and insights and feedback and feedback as arear of improvment and also provide that is language tone good or needs improvement and provide all the interview insights"+"in just 6 to 8 lines to improve it in JSON format with rating field and feedback field";
+    }
+  }, []);
+
+  const startstoprecording = () => {
+    if (isRecording) {
+      recognition.stop();
+    } else {
+      recognition.start();
+      setIsRecording(true);
+    }
+  };
+
+  useEffect(() => {
+    if (!isRecording && useranswer.length > 10) {
+      updateuseranswerindb();
+    }
+  }, [useranswer, isRecording]);
+
+  const updateuseranswerindb = async () => {
+    try {
+      console.log("Sending feedback prompt with answer:", useranswer);
+      setloading(true);
+  
+      const feedbackprompt = `{
+        "question": "${mockinterviewquestion[activequestionindex]?.Question}", 
+        "userAnswer": "${useranswer}", 
+        "request": "Provide a performance rating, feedback, areas of improvement, and language tone assessment in JSON format with 'rating' and 'feedback' fields."
+      }`;
+  
+      // Send the feedback prompt to the AI and get the response
       const result = await chatSession.sendMessage(feedbackprompt);
-      const MockjsonResp=(result.response.text()).replace("```json", "").replace("```", "");
-      console.log(MockjsonResp);
+  
+      // Log the raw result to inspect its structure
+      console.log("Raw AI result object:", result);
+  
+      // Extract the text from the response
+      let textResult;
+      if (result && result.response && result.response.text) {
+        textResult = await result.response.text(); // Correctly handle text extraction
+      } else {
+        throw new Error("Text method is not available on the response.");
+      }
+  
+      console.log("Raw AI Response text:", textResult);
+  
+      // Remove code block delimiters and extra whitespace
+      const cleanJsonText = textResult
+        .replace(/```json/, '') // Remove starting ```json
+        .replace(/```/, '')     // Remove ending ```
+        .trim();                // Remove any extra whitespace
+  
+      // Parse the cleaned JSON
+      const jsonFeedbackResp = JSON.parse(cleanJsonText);
+  
+      console.log("Parsed JSON Feedback Response:", jsonFeedbackResp);
+  
+      // Save the user answer and feedback in the database
+      const resp = await db.insert(UserAnswer).values({
+        mockidref: interviewdata?.mockid,
+        question: mockinterviewquestion[activequestionindex]?.Question,
+        correctans: mockinterviewquestion[activequestionindex]?.answer,
+        userAns: useranswer,
+        feedback: jsonFeedbackResp?.feedback,
+        rating: jsonFeedbackResp?.rating,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        createdAt: moment().format("DD-MM-yyyy"),
+      });
+  
+      if (resp) {
+        toast.success("Answer Recorded successfully");
+        setuseranswer("");
+      }
+      setloading(false);
+    } catch (error) {
+      console.error("Error while updating answer:", error);
+      toast.error("Something went wrong. Please try again.");
+      setloading(false);
     }
-    else{
-      startSpeechToText();
-    }
-   }
+  };
+  
 
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg shadow-lg w-full h-full">
@@ -83,19 +159,16 @@ function RecordanswerSec({mockinterviewquestion,activequestionindex}) {
       </div>
 
       {/* Record Button */}
-      <motion.div
-        className="my-5"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
+      <motion.div className="my-5" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
         <Button
+          disabled={loading}
           className={`px-6 py-3 text-lg font-semibold transition-colors duration-300 ${
             isRecording
               ? "bg-red-500 text-white hover:bg-red-600"
               : "bg-blue-600 text-white hover:bg-blue-700"
           } rounded-full`}
           variant="outline"
-          onClick={saveuseranswer}
+          onClick={startstoprecording}
         >
           {isRecording ? (
             <div className="flex items-center gap-2">
