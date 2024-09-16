@@ -69,7 +69,7 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
       console.log("User Answer:", useranswer);
   
       const feedbackprompt = `{
-        "question": "${mockinterviewquestion[activequestionindex]?.Question}",
+        "question": "${mockinterviewquestion[activequestionindex]?.question}",
         "userAnswer": "${useranswer}",
         "request": "Provide a performance rating (out of 10), feedback, areas of improvement, correct answer, and language tone assessment in JSON format with 'rating', 'feedback', 'userAnswer', 'date', and 'correctAnswer' fields."
       }`;
@@ -107,7 +107,7 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
   
       const resp = await db.insert(UserAnswer).values({
         mockidref: interviewdata?.mockid,
-        question: mockinterviewquestion[activequestionindex]?.Question,
+        question: mockinterviewquestion[activequestionindex]?.question,
         correctans: correctAnswer, 
         userAnswer: useranswer,
         feedback: jsonFeedbackResp?.feedback,

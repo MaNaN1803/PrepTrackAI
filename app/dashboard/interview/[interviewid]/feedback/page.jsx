@@ -37,6 +37,20 @@ function Feedback({ params }) {
 
   return (
     <div className='p-10 max-w-4xl mx-auto'>
+     
+      
+      {feedbackList?.length==0?
+        <div>
+        <h2 className='text-4xl font-extrabold text-blue-500 mb-4'>
+          Welcome !! 
+          
+        </h2>
+        <h3 className=' text-xl text-gray-500'>
+        Start with your first interview to view the Insights/Feedback...
+      </h3>
+      </div>
+       :
+    <>
       <h1 className='text-4xl font-extrabold text-green-700 mb-4'>Congratulations!</h1>
       <h2 className='text-2xl font-semibold text-gray-800 mb-2'>Interview Feedback & Insights</h2>
       <p className='text-lg text-gray-600 mb-4'>
@@ -69,6 +83,7 @@ function Feedback({ params }) {
           </CollapsibleContent>
         </Collapsible>
       ))}
+    </>}
       <Button className='mt-6 bg-green-600 text-white hover:bg-green-700' onClick={() => router.replace('/dashboard')}>
         Go Home
       </Button>

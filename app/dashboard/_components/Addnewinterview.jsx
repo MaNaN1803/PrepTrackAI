@@ -76,47 +76,78 @@ function Addnewinterview() {
     return (
         <div>
             <div
-                className='p-10 border rounded-lg bg-secondary hover:scale-105 hover:shadow-md cursor-pointer transition-all'
+                className='p-6 border rounded-lg bg-primary hover:scale-105 hover:shadow-lg cursor-pointer transition-all'
                 onClick={() => setOpenDailog(true)}
             >
-                <h2 className='font-semibold text-lg'>+ Add New</h2>
+                <h2 className='font-semibold text-lg text-white flex items-center gap-2'>
+                    + Add New Interview   <span role="img" aria-label="add">  ➕</span>
+                </h2>
             </div>
             <Dialog open={openDailog}>
-                <DialogContent className='max-w-2xl'>
+                <DialogContent className='max-w-2xl bg-black bg-opacity-70 dark:bg-opacity-90 rounded-lg shadow-lg p-8'>
                     <DialogHeader>
-                        <DialogTitle className='text-2xl'>Tell us more about your interview</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className='text-2xl font-semibold text-white dark:text-yellow-400'>
+                            Tell us more about your interview
+                        </DialogTitle>
+                        <DialogDescription className='mt-4 text-gray-300'>
                             <form onSubmit={onSubmit}>
-                                <div>
-                                    <h2>Add details about your job position/role, Job description and years of experience</h2>
-                                    <div className='mt-7 my-3'>
-                                        <label> Job Role/Job Position</label>
-                                        <Input placeholder="Ex. SDE 1,2.. , Full Stack Developer" required
+                                <div className='space-y-6'>
+                                    <div className='flex flex-col'>
+                                        <label className='text-lg font-medium text-gray-200'>
+                                            Job Role/Job Position
+                                        </label>
+                                        <Input 
+                                            placeholder="Ex. SDE 1,2.. , Full Stack Developer" 
+                                            required
+                                            className='mt-2 bg-gray-800 text-gray-200'
                                             onChange={(event) => setJobPosition(event.target.value)}
                                         />
                                     </div>
-                                    <div className='my-3'>
-                                        <label> Job Description/Tech Stack (In Short)</label>
-                                        <Textarea placeholder="Ex. NextJs , NodeJs , DBMS , Etc... " required
+                                    <div className='flex flex-col'>
+                                        <label className='text-lg font-medium text-gray-200'>
+                                            Job Description/Tech Stack (In Short)
+                                        </label>
+                                        <Textarea 
+                                            placeholder="Ex. NextJs , NodeJs , DBMS , Etc..." 
+                                            required
+                                            className='mt-2 bg-gray-800 text-gray-200'
                                             onChange={(event) => setJobDesc(event.target.value)}
                                         />
                                     </div>
-                                    <div className='my-3'>
-                                        <label> Years Of Experience</label>
-                                        <Input placeholder="Ex. Mention Years like 1 ,2 ,3..." type="number" min="0" max="80" required
+                                    <div className='flex flex-col'>
+                                        <label className='text-lg font-medium text-gray-200'>
+                                            Years Of Experience
+                                        </label>
+                                        <Input 
+                                            placeholder="Ex. Mention Years like 1 ,2 ,3..." 
+                                            type="number" 
+                                            min="0" 
+                                            max="80" 
+                                            required
+                                            className='mt-2 bg-gray-800 text-gray-200'
                                             onChange={(event) => setJobExperience(event.target.value)}
                                         />
                                     </div>
                                 </div>
-                                <div className='flex gap-5 justify-end'>
-                                    <Button type='button' variant="ghost" onClick={() => setOpenDailog(false)}>Cancel</Button>
-                                    <Button type='submit' disabled={loading}>
-                                        {loading ?
+                                <div className='flex gap-4 justify-end mt-6'>
+                                    <Button 
+                                        type='button' 
+                                        variant="outline" 
+                                        onClick={() => setOpenDailog(false)}
+                                        className=' text-gray-200 border-gray-500'
+                                    >
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        type='submit' 
+                                        disabled={loading}
+                                        className='bg-blue-500 text-white dark:bg-yellow-400 dark:text-black border-gray-500'
+                                    >
+                                        {loading ? (
                                             <>
-                                                <LoaderCircle /> Generating YOUR AI Powered Interview
+                                                <LoaderCircle className='animate-spin mr-2' /> Generating YOUR AI Powered Interview
                                             </>
-                                            : 'Start Interview !!'
-                                        }
+                                        ) : 'Start Interview !!'}
                                     </Button>
                                 </div>
                             </form>

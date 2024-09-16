@@ -13,7 +13,6 @@ function QuestionsSec({ mockinterviewquestion, activequestionindex, setactiveque
       alert("Sorry, your browser does not support text-to-speech.");
     }
   };
-  
 
   return (
     mockinterviewquestion && mockinterviewquestion.length > 0 ? (
@@ -43,9 +42,12 @@ function QuestionsSec({ mockinterviewquestion, activequestionindex, setactiveque
 
         {/* Active Question */}
         <h2 className="mt-6 text-md md:text-lg">
-          {mockinterviewquestion[activequestionindex]?.Question || "No question available."}
+          {mockinterviewquestion[activequestionindex]?.question || "No question available."}
         </h2>
-        <Volume2 className="cursor-pointer" onClick={()=>textToSpeach(mockinterviewquestion[activequestionindex]?.Question)} />
+        <Volume2
+          className="cursor-pointer"
+          onClick={() => textToSpeach(mockinterviewquestion[activequestionindex]?.question)}
+        />
       </div>
     ) : (
       <div>No questions available.</div>
