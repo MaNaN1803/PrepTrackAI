@@ -61,52 +61,53 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
 
   const updateuseranswerindb = async () => {
     try {
-      console.log("Sending feedback prompt with answer:", useranswer);
-      setloading(true);
+      if (!useranswer || useranswer.length === 0) {
+        console.error("User answer is empty. Cannot save to DB.");
+        return;
+      }
+  
+      console.log("User Answer:", useranswer);
   
       const feedbackprompt = `{
         "question": "${mockinterviewquestion[activequestionindex]?.Question}", 
         "userAnswer": "${useranswer}", 
-        "request": "Provide a performance rating, feedback, areas of improvement, and language tone assessment in JSON format with 'rating' and 'feedback' fields."
+        "request": "Provide a performance rating (out of 10), feedback, areas of improvement, correct answer, and language tone assessment in JSON format with 'rating', 'feedback', 'userAnswer', 'date', and 'correctAnswer' fields."
       }`;
   
-      // Send the feedback prompt to the AI and get the response
       const result = await chatSession.sendMessage(feedbackprompt);
-  
-      // Log the raw result to inspect its structure
-      console.log("Raw AI result object:", result);
-  
-      // Extract the text from the response
       let textResult;
       if (result && result.response && result.response.text) {
-        textResult = await result.response.text(); // Correctly handle text extraction
+        textResult = await result.response.text();
       } else {
         throw new Error("Text method is not available on the response.");
       }
   
-      console.log("Raw AI Response text:", textResult);
-  
-      // Remove code block delimiters and extra whitespace
       const cleanJsonText = textResult
-        .replace(/```json/, '') // Remove starting ```json
-        .replace(/```/, '')     // Remove ending ```
-        .trim();                // Remove any extra whitespace
+        .replace(/```json/, '')
+        .replace(/```/, '')
+        .trim();
   
-      // Parse the cleaned JSON
       const jsonFeedbackResp = JSON.parse(cleanJsonText);
   
-      console.log("Parsed JSON Feedback Response:", jsonFeedbackResp);
+      const userEmail = user?.primaryEmailAddress?.emailAddress || "defaultemail@example.com";
+      const createdAt = moment().format("DD-MM-yyyy");
+      const correctAnswer = mockinterviewquestion[activequestionindex]?.answer || "No correct answer provided";
   
-      // Save the user answer and feedback in the database
+      // Log the correct answer and feedback to debug null values
+      console.log("Correct Answer:", correctAnswer);
+      console.log("Feedback:", jsonFeedbackResp?.feedback);
+      console.log("Rating:", jsonFeedbackResp?.rating);
+  
       const resp = await db.insert(UserAnswer).values({
         mockidref: interviewdata?.mockid,
         question: mockinterviewquestion[activequestionindex]?.Question,
-        correctans: mockinterviewquestion[activequestionindex]?.answer,
-        userAns: useranswer,
+        correctans: correctAnswer,
+        userAnswer: useranswer,
         feedback: jsonFeedbackResp?.feedback,
         rating: jsonFeedbackResp?.rating,
-        userEmail: user?.primaryEmailAddress?.emailAddress,
-        createdAt: moment().format("DD-MM-yyyy"),
+        useremail: userEmail,
+        createdat: createdAt,
+        date: new Date().toISOString(), // Use current date
       });
   
       if (resp) {
@@ -121,7 +122,7 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
     }
   };
   
-
+  
   return (
     <div className="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-lg shadow-lg w-full h-full">
       {/* Webcam Section */}
