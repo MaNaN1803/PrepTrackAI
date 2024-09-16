@@ -69,10 +69,12 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
       console.log("User Answer:", useranswer);
   
       const feedbackprompt = `{
-        "question": "${mockinterviewquestion[activequestionindex]?.Question}", 
-        "userAnswer": "${useranswer}", 
+        "question": "${mockinterviewquestion[activequestionindex]?.Question}",
+        "userAnswer": "${useranswer}",
         "request": "Provide a performance rating (out of 10), feedback, areas of improvement, correct answer, and language tone assessment in JSON format with 'rating', 'feedback', 'userAnswer', 'date', and 'correctAnswer' fields."
       }`;
+  
+      console.log("Prompt sent to AI:", feedbackprompt);
   
       const result = await chatSession.sendMessage(feedbackprompt);
       let textResult;
@@ -82,32 +84,37 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
         throw new Error("Text method is not available on the response.");
       }
   
+      console.log("Raw AI Response:", textResult);
+  
+   
       const cleanJsonText = textResult
-        .replace(/```json/, '')
-        .replace(/```/, '')
+        .replace(/```json/g, '') 
+        .replace(/```/g, '')    
         .trim();
+  
+  
+      console.log("Cleaned JSON Text:", cleanJsonText);
   
       const jsonFeedbackResp = JSON.parse(cleanJsonText);
   
+      const correctAnswer = jsonFeedbackResp.correctAnswer || "No correct answer provided";
+  
+
+      console.log("Correct Answer from AI Response:", correctAnswer);
+  
       const userEmail = user?.primaryEmailAddress?.emailAddress || "defaultemail@example.com";
       const createdAt = moment().format("DD-MM-yyyy");
-      const correctAnswer = mockinterviewquestion[activequestionindex]?.answer || "No correct answer provided";
-  
-      // Log the correct answer and feedback to debug null values
-      console.log("Correct Answer:", correctAnswer);
-      console.log("Feedback:", jsonFeedbackResp?.feedback);
-      console.log("Rating:", jsonFeedbackResp?.rating);
   
       const resp = await db.insert(UserAnswer).values({
         mockidref: interviewdata?.mockid,
         question: mockinterviewquestion[activequestionindex]?.Question,
-        correctans: correctAnswer,
+        correctans: correctAnswer, 
         userAnswer: useranswer,
         feedback: jsonFeedbackResp?.feedback,
         rating: jsonFeedbackResp?.rating,
         useremail: userEmail,
         createdat: createdAt,
-        date: new Date().toISOString(), // Use current date
+        date: new Date().toISOString(),
       });
   
       if (resp) {
