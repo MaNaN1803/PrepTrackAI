@@ -2,15 +2,22 @@
 import { useState, useEffect } from "react";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const path = usePathname();
+  const router = useRouter();  // Add this line to get the router object
 
   useEffect(() => {
     console.log(path);
   }, [path]);
+
+  // Function to handle navigation
+  const handleNavigation = (path) => {
+    router.push(path);  // Use router.push to navigate to the path
+    setIsMenuOpen(false);  // Close the mobile menu after navigation
+  };
 
   return (
     <header className="bg-black text-gray-300 shadow-sm sticky top-0 z-50">
@@ -50,29 +57,33 @@ function Header() {
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
               path === "/dashboard" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
+            onClick={() => handleNavigation("/dashboard")}
           >
             Dashboard
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path === "/dashboard/questions" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
+              path === "/dashboard/howitworks" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
+            onClick={() => handleNavigation("/dashboard/howitworks")}
           >
-            Questions
+            How it Works?
+          </li>
+          <li
+            className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
+              path === "/dashboard/interviewguide" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
+            }`}
+            onClick={() => handleNavigation("/dashboard/interviewguide")}
+          >
+            InterviewGuide
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
               path === "/dashboard/upgrade" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
+            onClick={() => handleNavigation("/dashboard/upgrade")}
           >
             Upgrade
-          </li>
-          <li
-            className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path === "/dashboard/howitworks" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
-            }`}
-          >
-            How it Works?
           </li>
         </ul>
 
@@ -100,33 +111,33 @@ function Header() {
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
               path === "/dashboard" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => handleNavigation("/dashboard")}
           >
             Dashboard
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path === "/dashboard/questions" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
+              path === "/dashboard/howitworks" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => handleNavigation("/dashboard/howitworks")}
           >
-            Questions
+            How it Works?
+          </li>
+          <li
+            className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
+              path === "/dashboard/interviewguide" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
+            }`}
+            onClick={() => handleNavigation("/dashboard/interviewguide")}
+          >
+            InterviewGuide
           </li>
           <li
             className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
               path === "/dashboard/upgrade" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
             }`}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => handleNavigation("/dashboard/upgrade")}
           >
             Upgrade
-          </li>
-          <li
-            className={`hover:text-[#FFD700] hover:font-bold transition-all duration-300 ease-in-out cursor-pointer ${
-              path === "/dashboard/howitworks" ? "text-[#FFD700] font-bold border-b-2 border-[#FFD700]" : ""
-            }`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            How it Works?
           </li>
         </ul>
       </div>
