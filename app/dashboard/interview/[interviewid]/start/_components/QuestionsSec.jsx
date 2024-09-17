@@ -32,7 +32,7 @@ function QuestionsSec({ mockinterviewquestion, activequestionindex, setactiveque
               key={index}
               onClick={() => setactivequestionindex(index)}
               className={`p-3 bg-blue-500 rounded-full text-xs md:text-sm text-center cursor-pointer transition-all duration-300 ${
-                activequestionindex === index && "bg-black text-white"
+                activequestionindex === index ? "bg-black text-white" : ""
               }`}
             >
               Question #{index + 1}

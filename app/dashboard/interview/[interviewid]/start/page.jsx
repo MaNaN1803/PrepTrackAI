@@ -14,7 +14,6 @@ function StartInterview({ params }) {
   const [mockinterviewquestion, setmockinterviewquestion] = useState([]);
   const [activequestionindex, setactivequestionindex] = useState(0);
 
-  // Fetch interview details when the component mounts
   useEffect(() => {
     if (params && params.interviewid) {
       getInterviewDetails();
@@ -27,11 +26,20 @@ function StartInterview({ params }) {
         .select()
         .from(mockinterview)
         .where(eq(mockinterview.mockid, params.interviewid));
-
+  
       if (result && result[0]) {
         const jsonMockresp = JSON.parse(result[0].jsonMockresp);
-        console.log("Mock Interview Questions:", jsonMockresp);
-        setmockinterviewquestion(jsonMockresp);
+  
+        // Transform the fetched data to ensure lowercase 'question' and 'answer'
+        const transformedMockResp = jsonMockresp.map((item) => ({
+          question: item.Question,  // Map 'Question' to 'question'
+          answer: item.Answer,      // Map 'Answer' to 'answer'
+          ...item,                  // Spread any other fields (if necessary)
+        }));
+  
+        console.log("Transformed Mock Interview Questions:", transformedMockResp);
+  
+        setmockinterviewquestion(transformedMockResp);
         setInterviewdata(result[0]);
       } else {
         console.error("No interview data found.");
@@ -40,6 +48,7 @@ function StartInterview({ params }) {
       console.error("Error fetching interview details:", error);
     }
   };
+  
 
   return (
     <div className="container mx-auto p-4">
