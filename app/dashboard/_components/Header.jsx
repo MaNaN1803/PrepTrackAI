@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,13 +24,14 @@ function Header() {
     <header className="bg-black text-gray-300 shadow-sm sticky top-0 z-50">
       <div className="flex p-4 items-center justify-between max-w-7xl mx-auto">
         {/* Logo */}
+        <Link href="/">
         <Image
           src="/logo-removebg-preview (2).svg"
           width={160}
           height={100}
           alt="logo"
         />
-
+        </Link>
         {/* Hamburger menu icon for mobile */}
         <button
           className="md:hidden text-gray-300"

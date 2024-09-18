@@ -71,7 +71,7 @@ function RecordanswerSec({ mockinterviewquestion, activequestionindex, interview
       const feedbackprompt = `{
         "question": "${mockinterviewquestion[activequestionindex]?.question}",
         "userAnswer": "${useranswer}",
-        "request": "Provide a performance rating (out of 10), feedback, areas of improvement, correct answer, and language tone assessment in JSON format with 'rating', 'feedback', 'userAnswer', 'date', and 'correctAnswer' fields."
+        "request": "Please auto-correct any spelling or word misinterpretations and also accept multilingual answers , The answer could be in Hindi or English. If it's in Hindi, translate it to English and finally Provide a performance rating (out of 10), feedback, areas of improvement, correct answer, and language tone assessment in JSON format with 'rating', 'feedback', 'userAnswer', 'date', and 'correctAnswer' fields."
       }`;
   
       console.log("Prompt sent to AI:", feedbackprompt);
