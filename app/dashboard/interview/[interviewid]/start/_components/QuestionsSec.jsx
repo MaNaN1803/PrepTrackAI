@@ -41,11 +41,11 @@ function QuestionsSec({ mockinterviewquestion, activequestionindex, setactiveque
         </div>
 
         {/* Active Question */}
-        <h2 className="mt-6 text-md md:text-lg">
+        <h2 className="mt-6 text-black text-md md:text-lg  dark:text-white">
           {mockinterviewquestion[activequestionindex]?.question || "No question available."}
         </h2>
         <Volume2
-          className="cursor-pointer"
+          className="cursor-pointer bg-black text-white dark:bg-white text-black"
           onClick={() => textToSpeach(mockinterviewquestion[activequestionindex]?.question)}
         />
       </div>

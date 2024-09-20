@@ -79,7 +79,7 @@ function Addnewinterview() {
                 className='p-6 border rounded-lg bg-primary hover:scale-105 hover:shadow-lg cursor-pointer transition-all'
                 onClick={() => setOpenDailog(true)}
             >
-                <h2 className='font-semibold text-lg text-white flex items-center gap-2'>
+                <h2 className='font-semibold text-lg text-white flex items-center gap-2 dark:text-black dark:bg-white'>
                     + Add New Interview   <span role="img" aria-label="add">  ➕</span>
                 </h2>
             </div>
