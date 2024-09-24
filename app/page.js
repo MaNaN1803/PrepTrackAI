@@ -32,12 +32,15 @@ export default function Home() {
             createdAt: UserReviews.createdAt,
           })
           .from(UserReviews)
-          .orderBy("createdAt", "desc") // Corrected method to order by latest
-          .limit(3) // Limit to latest 3 reviews
-          .execute();
+          .execute(); // Fetch all reviews
 
-        console.log("Fetched Reviews: ", fetchedReviews); // Debugging line to check if reviews are fetched
-        setReviews(fetchedReviews);
+          // Sort reviews by id in descending order and take the top 3
+          const sortedReviews = fetchedReviews
+            .sort((a, b) => b.id - a.id)
+            .slice(0, 3); // Get the top 3 reviews
+  
+          console.log("Fetched Reviews: ", sortedReviews); // Debugging line to check if reviews are fetched
+          setReviews(sortedReviews);
       } catch (error) {
         console.error("Failed to fetch latest reviews", error);
       }

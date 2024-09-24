@@ -23,20 +23,24 @@ function UserReviewsPage() {
           .from(UserReviews)
           .orderBy("created_at", "desc") 
           .execute();
-
-          const reviewsWithParsedDates = fetchedReviews.map(review => ({
+  
+        const reviewsWithParsedDates = fetchedReviews.map(review => ({
           ...review,
           createdAt: new Date(review.createdAt), 
         }));
-
-        setReviews(reviewsWithParsedDates);
-        console.log("Fetched Reviews:", reviewsWithParsedDates); 
+  
+        // Sort reviews by id in descending order
+        const sortedReviews = reviewsWithParsedDates.sort((a, b) => b.id - a.id);
+  
+        setReviews(sortedReviews);
+        console.log("Fetched Reviews:", sortedReviews); 
       } catch (error) {
         console.error("Failed to fetch reviews", error);
       }
     };
     fetchReviews();
   }, []);
+  
 
   
   const handleSubmitReview = async (e) => {
