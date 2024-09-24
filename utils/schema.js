@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, date } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, varchar, date,timestamp } from "drizzle-orm/pg-core";
 
 export const mockinterview = pgTable('mockinterview', {
     id: serial('id').primaryKey(),
@@ -23,3 +23,12 @@ export const UserAnswer = pgTable('userAnswer', {
     createdat: varchar('createdat'),
     date: date('date').notNull(),
 });
+
+export const UserReviews = pgTable('user_reviews', {
+    id: serial('id').primaryKey(),
+    reviewText: text('review_text'),
+    username: varchar('username', { length: 100 }),
+    userEmail: varchar('user_email', { length: 100 }),
+    avatarUrl: varchar('avatar_url', { length: 255 }),
+    createdAt: timestamp('created_at').defaultNow(),
+  });
