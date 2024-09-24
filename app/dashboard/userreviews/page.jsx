@@ -11,15 +11,26 @@ function UserReviewsPage() {
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isFormVisible, setIsFormVisible] = useState(false);  // State to toggle form visibility
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const [error, setError] = useState(null);
 
-  // Fetch existing reviews from the database
+
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const fetchedReviews = await db.select().from(UserReviews).execute();
-        setReviews(fetchedReviews);
+        const fetchedReviews = await db
+          .select()
+          .from(UserReviews)
+          .orderBy("created_at", "desc") 
+          .execute();
+
+          const reviewsWithParsedDates = fetchedReviews.map(review => ({
+          ...review,
+          createdAt: new Date(review.createdAt), 
+        }));
+
+        setReviews(reviewsWithParsedDates);
+        console.log("Fetched Reviews:", reviewsWithParsedDates); 
       } catch (error) {
         console.error("Failed to fetch reviews", error);
       }
@@ -27,7 +38,7 @@ function UserReviewsPage() {
     fetchReviews();
   }, []);
 
-  // Function to handle submission of a new review
+  
   const handleSubmitReview = async (e) => {
     e.preventDefault();
 
@@ -41,19 +52,21 @@ function UserReviewsPage() {
         username: user.username || user.fullName || user.primaryEmailAddress?.emailAddress,
         userEmail: user.primaryEmailAddress?.emailAddress,
         avatarUrl: user.profileImageUrl,
-        createdAt: new Date(),  // Changed this to pass a JS Date object
+        createdAt: new Date(), 
       };
 
+      
       await db.insert(UserReviews).values(newReviewEntry);
 
+ 
       setReviews((prevReviews) => [
+        { ...newReviewEntry, id: prevReviews.length ? Math.max(...prevReviews.map(r => r.id)) + 1 : 1 }, // Adjust ID if necessary
         ...prevReviews,
-        { ...newReviewEntry, id: prevReviews.length + 1 },
       ]);
 
       setNewReview("");
       setIsSubmitting(false);
-      setIsFormVisible(false);  // Hide form after submission
+      setIsFormVisible(false); 
     } catch (error) {
       console.error("Failed to save review", error);
       setError("Failed to submit review. Please try again.");
@@ -61,45 +74,46 @@ function UserReviewsPage() {
     }
   };
 
-  // Function to handle deletion of a review
+  
   const handleDeleteReview = async (id) => {
     try {
-        console.log("Deleting review with id:", id);
-        
-        // Perform the delete operation
-        const deleted = await db.delete(UserReviews).where(eq(UserReviews.id, id)).execute();
-        
-        // Check if any rows were affected
-        if (deleted.count > 0) {
-            setReviews((prevReviews) => prevReviews.filter((review) => review.id !== id));
-        } else {
-            setError("Failed to delete review. Review not found.");
-        }
+      console.log("Deleting review with id:", id);
+      
+
+      const deleted = await db.delete(UserReviews).where(eq(UserReviews.id, id)).execute();
+      
+  
+      if (deleted.count > 0) {
+          setReviews((prevReviews) => prevReviews.filter((review) => review.id !== id));
+      } else {
+          setError("Failed to delete review. Review not found.");
+      }
     } catch (error) {
-        console.error("Failed to delete review", error);
-        setError("Failed to delete review. Please try again.");
+      console.error("Failed to delete review", error);
+      setError("Failed to delete review. Please try again.");
     }
-};
+  };
+
   return (
     <div className="p-8 mt-2 max-w-4xl mx-auto bg-black rounded-lg shadow-lg">
       <h1 className="text-4xl font-bold mb-6 text-purple-500 text-center">User Reviews</h1>
 
-      {/* Review Icon to toggle form */}
+   
       <div className="flex justify-center mb-6">
         <Image
-          src="/reviewform.png"  // Ensure the correct path to the image
+          src="/reviewform.png"
           alt="Review Form Icon"
           width={50}
           height={50}
           className="cursor-pointer"
-          onClick={() => setIsFormVisible(!isFormVisible)}  // Toggle form visibility
+          onClick={() => setIsFormVisible(!isFormVisible)} 
         />
         <h1 className="justify-center mt-3 text-white">
           Press the icon to write the review
         </h1>
       </div>
 
-      {/* Review submission form */}
+    
       {isFormVisible && (
         <form onSubmit={handleSubmitReview} className="mb-8 transition-all">
           {error && <p className="text-red-500 mb-4">{error}</p>}
@@ -120,12 +134,11 @@ function UserReviewsPage() {
         </form>
       )}
 
-      {/* Eye-catching quote */}
       <div className="text-center my-8 text-gray-300 italic text-lg">
         "Your feedback shapes the future. Share your thoughts and help us grow!"
       </div>
 
-      {/* Display reviews in grid format */}
+  
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {reviews.length > 0 ? (
           reviews.map((review) => (
@@ -133,7 +146,7 @@ function UserReviewsPage() {
               key={review.id}
               className="p-4 bg-gray-900 border border-purple-700 rounded-md flex flex-col gap-4 shadow-lg transition-transform transform hover:scale-105"
             >
-              {/* User Avatar */}
+           
               <div className="flex-shrink-0 self-center">
                 <img
                   src={review.avatarUrl || "/reviewuser.png"}
@@ -142,16 +155,16 @@ function UserReviewsPage() {
                 />
               </div>
 
-              {/* Review Content */}
+           
               <div className="flex-grow text-center">
                 <p className="font-bold text-purple-400">{review.username}</p>
                 <p className="text-gray-300">{review.reviewText}</p>
                 <p className="text-gray-500 text-sm">
-                  {new Date(review.createdAt).toLocaleDateString()}
+                  {new Date(review.createdAt).toLocaleDateString()} {new Date(review.createdAt).toLocaleTimeString()} 
                 </p>
               </div>
 
-              {/* Delete Button */}
+           
               {user?.emailAddresses?.some(email => email.emailAddress === review.userEmail) && (
                 <button
                   onClick={() => handleDeleteReview(review.id)}
@@ -167,7 +180,7 @@ function UserReviewsPage() {
         )}
       </div>
 
-      {/* Another UI-enhancing element */}
+    
       <div className="text-center mt-10">
         <p className="text-2xl text-purple-400 font-semibold">
           "Every voice matters. Your reviews inspire others!"

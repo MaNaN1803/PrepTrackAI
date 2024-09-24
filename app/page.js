@@ -1,13 +1,15 @@
-// page.js
 "use client";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import Header from "@/app/dashboard/_components/Header";
 import Image from "next/image";
 import Link from "next/link";
+import { db } from "@/utils/db"; // Import your db instance
+import { UserReviews } from "@/utils/schema"; // Import UserReviews table schema
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     // Simulate a loading time of 3 seconds
@@ -17,6 +19,32 @@ export default function Home() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    // Fetch the latest 3 reviews from the database
+    const fetchLatestReviews = async () => {
+      try {
+        const fetchedReviews = await db
+          .select({
+            id: UserReviews.id,
+            reviewText: UserReviews.reviewText,
+            username: UserReviews.username,
+            createdAt: UserReviews.createdAt,
+          })
+          .from(UserReviews)
+          .orderBy("createdAt", "desc") // Corrected method to order by latest
+          .limit(3) // Limit to latest 3 reviews
+          .execute();
+
+        console.log("Fetched Reviews: ", fetchedReviews); // Debugging line to check if reviews are fetched
+        setReviews(fetchedReviews);
+      } catch (error) {
+        console.error("Failed to fetch latest reviews", error);
+      }
+    };
+
+    fetchLatestReviews();
+  }, []); // Empty dependency array ensures this runs once on page load
 
   if (isLoading) {
     return (
@@ -92,18 +120,17 @@ export default function Home() {
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-10 text-yellow-400">What Our Users Say</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-            <div className="bg-gray-900 text-gray-300 p-6 md:p-8 rounded-lg shadow-xl">
-              <p className="text-lg mb-4">"PrepTrackAI helped me ace my interviews and land a job! 🚀"</p>
-              <cite className="block mt-2 text-gray-500">- Alex</cite>
-            </div>
-            <div className="bg-gray-900 text-gray-300 p-6 md:p-8 rounded-lg shadow-xl">
-              <p className="text-lg mb-4">"The insights were accurate and multilingual support improved my performance drastically. 💡"</p>
-              <cite className="block mt-2 text-gray-500">- Jordan</cite>
-            </div>
-            <div className="bg-gray-900 text-gray-300 p-6 md:p-8 rounded-lg shadow-xl">
-              <p className="text-lg mb-4">"The AI feedback and site responsiveness was a game-changer for me! 🤖"</p>
-              <cite className="block mt-2 text-gray-500">- Taylor</cite>
-            </div>
+            {/* Render latest reviews dynamically */}
+            {reviews.length > 0 ? (
+              reviews.map((review) => (
+                <div key={review.id} className="bg-gray-900 text-gray-300 p-6 md:p-8 rounded-lg shadow-xl">
+                  <p className="text-lg mb-4">{`"${review.reviewText}"`}</p>
+                  <cite className="block mt-2 text-gray-500">- {review.username || "Anonymous"}</cite>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No reviews yet. Be the first to leave a review!</p>
+            )}
           </div>
         </div>
       </section>
