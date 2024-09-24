@@ -17,6 +17,8 @@
 html, body {
   height: 100%;
   margin: 0;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 body {
@@ -97,3 +99,5 @@ body {
     @apply bg-background text-foreground flex flex-col;
   }
 }
+
+
