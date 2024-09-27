@@ -18,7 +18,7 @@ html, body {
   height: 100%;
   margin: 0;
   scroll-behavior: smooth;
-  scrollbar-width: none;
+  
 }
 
 body {
@@ -101,3 +101,20 @@ body {
 }
 
 
+/* Define scrollbar styles */
+::-webkit-scrollbar {
+  width: 4px; /* Decrease the width of the scrollbar */
+   /* Decrease the height of the scrollbar */
+}
+
+/* Handle styles */
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to top right, #01156b, rgb(67, 108, 241)); /* Initial gradient color */
+  border-radius: 2px; /* Rounded corners */
+  transition: background 0.3s ease-in-out; /* Smooth transition for color */
+}
+
+/* Handle hover effect */
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to top right, rgb(67, 108, 241), #01156b); /* Reverse gradient on hover */
+}

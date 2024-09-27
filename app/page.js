@@ -76,7 +76,7 @@ export default function Home() {
                 PrepTrackAI
               </span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-300">
+            <p className="text-xl font-semibold md:text-2xl mb-8 text-gray-300">
               Ace your interviews with AI-powered insights, feedback, and mock practice. Start now and be interview-ready!
             </p>
             <Link href="/dashboard">
@@ -87,10 +87,10 @@ export default function Home() {
           </div>
           <div className="md:w-1/2">
             <Image
-              src="/home.png"
+              src="/master1.png"
               alt="Hero Image"
-              width={600}
-              height={600}
+              width={800}
+              height={800}
               className="mx-auto drop-shadow-2xl animate-slideInRight w-full max-w-sm md:max-w-full"
             />
           </div>
