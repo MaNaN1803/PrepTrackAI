@@ -10,6 +10,7 @@ import { UserReviews } from "@/utils/schema"; // Import UserReviews table schema
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [reviews, setReviews] = useState([]);
+  const [showChatbot, setShowChatbot] = useState(false);
 
   useEffect(() => {
     // Simulate a loading time of 3 seconds
@@ -68,9 +69,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-black text-white py-16 md:py-24 px-4 md:px-6">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between">
+        <div className="max-w-7xl mt-12 mx-auto flex flex-col md:flex-row items-center justify-between">
           <div className="md:w-1/2 mb-10 md:mb-0 animate-fadeIn text-center md:text-left">
-            <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">Welcome to</h1>
+            <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">Welcome to ,</h1>
             <h1 className="text-5xl md:text-6xl font-extrabold leading-tight mb-6">
               <span className="bg-gradient-to-r from-blue-100 via-white to-purple-500 bg-clip-text text-transparent">
                 PrepTrackAI
@@ -95,7 +96,55 @@ export default function Home() {
             />
           </div>
         </div>
+
+        {/* Chatbot Icon */}
+      <div
+        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50 flex items-center space-x-2 md:space-x-4"
+      >
+        {/* Chatbot Icon */}
+        <button
+          onClick={() => setShowChatbot((prev) => !prev)} 
+          className="focus:outline-none"
+        >
+          <img
+            src="/chat-bot.png" 
+            alt="Chatbot Icon"
+            className="w-16 h-16 hover:scale-110 transition-transform duration-300"
+          />
+        </button>
+
+       
+        {!showChatbot && (
+          <p className="hidden md:block text-lg font-semibold text-gray-300">
+            Chatbot to help you guide about PrepTrackAI
+          </p>
+        )}
+      </div>
+
+      
+      {showChatbot && (
+        <div className="fixed bottom-20 right-4 md:bottom-24 md:right-8 w-[90%] max-w-md h-[70vh] bg-white shadow-lg rounded-lg z-50">
+          <iframe
+            src="https://cdn.botpress.cloud/webchat/v2/shareable.html?botId=a7e2a0d2-f1aa-4f62-8410-58c86f933102"
+            title="PrepTrackAI Chatbot"
+            width="100%"
+            height="100%"
+            className="rounded-lg"
+          />
+          <button
+            className="absolute top-2 right-2 text-black bg-gray-200 p-1 rounded-full"
+            onClick={() => setShowChatbot(false)}
+          >
+            ✖️
+          </button>
+        </div>
+      )}
+
+
+
       </section>
+
+
 
       {/* Features Section */}
       <section className="py-16 md:py-20 px-4 md:px-6 bg-gradient-to-r from-black via-gray-900 to-gray-800">
