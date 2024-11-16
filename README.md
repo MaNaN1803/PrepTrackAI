@@ -1,93 +1,116 @@
-Table of Contents
-Introduction
-Objective
-Scope
-Study of Existing Systems
-Project Description
-Methodology
-Features
-System Architecture
-User Interface (UI)
-Technology Stack
-Testing Plan
-Introduction
-PrepTrackAI is an AI-driven interview preparation platform designed to help users overcome interview anxiety and improve performance through real-time feedback, multilingual support, and detailed performance reports. It aims to address challenges in traditional mock interview systems by leveraging advanced AI-powered analytics.
 
-Objective
-The primary objective of PrepTrackAI is to provide an adaptive and personalized mock interview experience, helping users:
+## **Table of Contents**
+1. [Introduction](#introduction)
+2. [Objective](#objective)
+3. [Scope](#scope)
+4. [Existing Systems](#study-of-existing-systems)
+5. [Project Description](#project-description)
+6. [Methodology](#methodology)
+7. [Features](#features)
+8. [System Architecture](#system-architecture)
+9. [User Interface (UI)](#user-interface-ui)
+10. [Technology Stack](#technology-stack)
+11. [Testing Plan](#testing-plan)
 
-Receive real-time feedback.
-Enhance their confidence.
-Overcome language and skill barriers.
-Scope
-PrepTrackAI offers:
+---
 
-AI-generated multilingual interview questions.
-Real-time speech-to-text capabilities.
-Detailed performance reports with actionable insights.
-Limitations:
+## **Introduction**
+PrepTrackAI is an innovative AI-powered mock interview platform that helps users prepare for job interviews with real-time feedback, personalized performance reports, and multilingual support. It addresses common challenges such as interview anxiety, lack of feedback, and limited access to quality mock interviews.  
 
-Feedback relies on AI accuracy.
-Focus is limited to interview preparation.
-Study of Existing Systems
-1. InterviewAI
-Advantages: AI feedback, user-friendly interface.
-Gaps: Lacks multilingual support, limited feedback granularity.
-2. Pramp
-Advantages: Peer-based feedback, flexible scheduling.
-Gaps: No AI-driven insights, limited language options.
-3. InterviewBuddy
-Advantages: Real-time interviews with professionals.
-Gaps: No automation, costly services.
-4. HireVue
-Advantages: Scalable for companies.
-Gaps: Lacks candidate-focused features.
-5. Big Interview
-Advantages: Structured feedback and tutorials.
-Gaps: No real-time AI insights, monolingual support.
-Project Description
-PrepTrackAI integrates advanced technologies:
+---
 
-Frontend: Built with Next.js.
-Backend: Utilizes Gemini AI API and PostgreSQL.
-Features: Speech-to-text recording, real-time feedback, and downloadable performance reports.
-Methodology
-Requirement Gathering: Define functional and non-functional requirements.
-Design: Develop wireframes, system architecture, and flowcharts.
-Development:
-Frontend: Responsive, interactive UI with Next.js.
-Backend: Secure data management with PostgreSQL and Drizzle ORM.
-AI Integration: Speech-to-text and question generation with Gemini AI.
-Testing: Unit, integration, performance, and security testing.
-Deployment: Vercel and Neon.tech for CI/CD.
-Features
-AI-Generated Interviews: Industry-relevant questions tailored to users.
-Speech-to-Text: Verbal answers converted to text for analysis.
-AI Feedback: Detailed performance insights and recommendations.
-Multilingual Support: Translate and evaluate non-English responses.
-User Dashboard: Track progress and review feedback.
-System Architecture
-The platform integrates:
+## **Objective**
+The primary objective of PrepTrackAI is to provide a personalized and AI-driven platform that enhances user interview skills through:
+- Real-time AI feedback
+- Performance analysis
+- Multilingual support
+- Confidence-building tools  
 
-Frontend (Next.js): Interactive interface for users.
-Backend (Node.js): Manages data flow and communication with AI.
-Database (PostgreSQL): Stores user data, questions, and reports.
-AI (Gemini API): Generates questions and evaluates responses.
-User Interface (UI)
-Landing Page: Login via Clerk Auth.
-Dashboard: Access guides, start interviews, and view past sessions.
-Interview Page: Minimalist design for question-answer interaction.
-Feedback Page: Graphical insights and downloadable reports.
-Technology Stack
-Frontend: HTML, CSS, Next.js.
-Backend: Node.js, Express.js.
-Database: PostgreSQL with Drizzle ORM.
-AI Integration: Gemini AI.
-Authentication: Clerk Auth for secure login.
-Testing Plan
-Unit Testing: Test individual components with Jest/Mocha.
-Integration Testing: Verify seamless interaction between components.
-Performance Testing: Optimize load times using JMeter.
-Security Testing: Ensure data safety with OWASP ZAP.
-PrepTrackAI: Bridging the gap between users and success, one interview at a time!
+---
 
+## **Scope**
+The project focuses on creating a comprehensive mock interview platform with:
+- AI-generated questions
+- Speech-to-text response recording
+- Detailed performance reports
+- Limitations: Accuracy of AI feedback and language support variability.
+
+---
+
+## **Study of Existing Systems**
+| System             | Advantages                                              | Disadvantages                              | Gaps Identified                            |
+|--------------------|--------------------------------------------------------|------------------------------------------|--------------------------------------------|
+| **InterviewAI**    | Real-time AI feedback                                   | Lack of multilingual support              | Limited feedback granularity               |
+| **Pramp**          | Peer-to-peer interactions                               | No AI-driven analytics                    | Dependency on peer availability            |
+| **InterviewBuddy** | Real-time human feedback                                | Costly, no AI integration                 | Expensive, limited availability            |
+| **HireVue**        | AI-powered video evaluations for companies              | Employer-focused, no user-centric tools   | Lacks direct feedback for interviewees     |
+| **Big Interview**  | Tutorials and expert feedback                           | No AI, lacks multilingual support         | Absence of AI integration                  |
+
+---
+
+## **Project Description**
+PrepTrackAI offers a seamless, user-friendly experience by integrating a **Next.js frontend**, **Gemini AI backend**, and **PostgreSQL database**.  
+
+### **Key Flow**
+1. **User Authentication**: Secure login using Clerk Auth (OTP verification).  
+2. **Dashboard Access**: Options to start interviews, view guides, and download reports.  
+3. **AI-Generated Questions**: Tailored questions generated using Gemini AI.  
+4. **Speech-to-Text Responses**: Verbal answers converted into text for evaluation.  
+5. **Performance Reports**: Detailed feedback and actionable insights provided post-interview.  
+
+---
+
+## **Methodology**
+The project follows a structured approach with distinct phases:
+1. **Requirement Analysis**  
+2. **Design Phase**  
+3. **Frontend Development** (Next.js)  
+4. **Backend Development** (Node.js, PostgreSQL)  
+5. **AI Integration** (Gemini API)  
+6. **Testing and Optimization**  
+7. **Deployment** (Vercel, Neon.tech)  
+
+---
+
+## **Features**
+- **AI-Generated Interview Questions**
+- **Speech-to-Text Answer Recording**
+- **Detailed AI Feedback and Insights**
+- **User Dashboard**
+- **Multilingual Support**
+- **Secure Authentication** (Clerk Auth)
+- **Responsive Design**  
+- **Downloadable Reports**
+
+---
+
+## **System Architecture**
+![System Architecture](#)  
+(Include a system architecture diagram here)
+
+---
+
+## **User Interface (UI)**
+- **Landing Page**: Dark-themed design with a professional call-to-action.  
+- **Dashboard**: Centralized interface for navigation and performance tracking.  
+- **Interview Page**: Minimalist layout focusing on user interaction and progress tracking.  
+- **Feedback Page**: Visualized performance data with actionable insights.  
+
+---
+
+## **Technology Stack**
+- **Frontend**: Next.js, HTML5, CSS3, JavaScript (ES6+)  
+- **Backend**: Node.js, Express.js  
+- **Database**: PostgreSQL (managed by Neon.tech and Drizzle ORM)  
+- **Authentication**: Clerk Auth  
+- **AI Tools**: Gemini AI, Speech-to-Text  
+- **Deployment**: Vercel  
+
+---
+
+## **Testing Plan**
+- **Unit Testing**: Jest (Frontend), Mocha/Chai (Backend)  
+- **Integration Testing**: Ensures seamless interactions between components.  
+- **End-to-End Testing**: Cypress for real-world scenario simulations.  
+- **Performance Testing**: JMeter, Lighthouse for response times and scalability.  
+- **Security Testing**: OWASP ZAP to detect vulnerabilities. 
