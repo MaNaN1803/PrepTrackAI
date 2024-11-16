@@ -217,27 +217,52 @@ function Feedback({ params }) {
                 <ChevronsUpDown className='h-5 w-5 text-gray-500' />
               </CollapsibleTrigger>
               <CollapsibleContent className='p-4 bg-white border border-gray-200 rounded-lg shadow-md'>
-                <div className='flex flex-col gap-4'>
-                  <div className='p-4 border rounded-lg bg-red-50 text-red-800'>
-                    <strong className='text-base'>Rating:</strong> {item.rating}
-                  </div>
-                  <div className='p-4 border rounded-lg bg-gray-50 text-gray-800'>
-                    <strong className='text-base'>Your Answer:</strong> {item.userAnswer}
-                  </div>
-                  <div className='p-4 border rounded-lg bg-green-50 text-green-800'>
-                    <strong className='text-base'>Correct Answer:</strong> {item.correctans}
-                  </div>
-                  <div className='p-4 border rounded-lg bg-blue-50 text-blue-800'>
-                    <strong className='text-base'>Feedback:</strong> {item.feedback}
-                  </div>
-                  <Button
-                    className='mt-4 bg-blue-600 text-white hover:bg-blue-700'
-                    onClick={() => generatePDFForQuestion(index)}
-                  >
-                    Download PDF for this Question
-                  </Button>
-                </div>
-              </CollapsibleContent>
+  <div className='flex flex-col gap-6'>
+    {/* Rating Section */}
+    <div className='p-4 border rounded-lg bg-red-50 text-red-800'>
+      <strong className='text-base'>Rating:</strong> {item.rating}
+    </div>
+    
+    {/* Your Answer Section */}
+    <ul className='p-4 border rounded-lg bg-gray-50 text-gray-800 list-disc list-inside'>
+      <li>
+        <strong className='text-base'>Your Answer:</strong> {item.userAnswer}
+      </li>
+    </ul>
+
+    {/* Correct Answer Section */}
+    <div className='p-4 border rounded-lg bg-green-50 text-green-800'>
+      <strong className='text-base'>Correct Answer:</strong>
+      <ul className='list-disc list-inside pl-5'>
+        {item.correctans.split('\n').map((line, index) => (
+          <li key={index}>{line || `Additional Correct Answer Point ${index + 1}`}</li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Feedback Section */}
+    <div className='p-4 border rounded-lg bg-blue-50 text-blue-800'>
+      <strong className='text-base'>Feedback:</strong>
+      <ul className='list-disc list-inside pl-5'>
+        {item.feedback.split('\n').map((line, index) => (
+          <li key={index}>{line || `Additional Feedback Point ${index + 1}`}</li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Download PDF Button */}
+    <Button
+      className='mt-4 bg-blue-600 text-white hover:bg-blue-700'
+      onClick={() => generatePDFForQuestion(index)}
+    >
+      Download PDF for this Question
+    </Button>
+  </div>
+</CollapsibleContent>
+
+
+
+
             </Collapsible>
           ))}
         </>
